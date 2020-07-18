@@ -7,13 +7,10 @@
 import random
 
 class Words:
-    words = ["pheasant", "duck", "turkey", "chicken", "vulture", "full",
-             "albatross", "puffin", "lion", "horn", "beaver", "koala", "kangaroo"]
+    def __init__(self):
+        self.words = ["pheasant", "duck", "turkey", "chicken", "vulture", "full",
+                      "albatross", "puffin", "lion", "horn", "beaver", "koala", "kangaroo"]
 
     def choose_word(self):
         return random.choice(self.words)
 
-
-run = Words()
-word = run.choose_word()
-print("Word chose: " + word)
