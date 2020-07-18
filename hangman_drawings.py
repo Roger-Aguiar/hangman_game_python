@@ -5,7 +5,7 @@
 
 class HangmanDrawing:
     @staticmethod
-    def return_hangman_drawing(error):
+    def draw_hangman_drawing(error):
         hangman_drawings = [
             """
                       ------------------
