@@ -12,6 +12,7 @@ class HangmanGame:
     def __init__(self, error):
         self.error = error
         self.letters_of_the_user = []
+        self.word_of_the_player = ''
 
     def get_word(self):
         run = words_list.Words()
@@ -20,18 +21,19 @@ class HangmanGame:
 
     def guess_letter(self, word_of_the_game):
         word_of_the_player = ""
+        count_word_of_the_player = 0
         attempts = 6
 
         hangman_drawings.HangmanDrawing.draw_hangman_drawing(0)
         print('Word: ')
         print('__ ' * len(word_of_the_game))
 
-        while len(word_of_the_player) < len(word_of_the_game):
+        while count_word_of_the_player < len(word_of_the_game):
             letter = input('\nEnter a letter: ')
 
             if letter in word_of_the_game:
-                word_of_the_player = self.write_letter_of_the_player(letter, word_of_the_game)
-                print("Your word: " + word_of_the_player)
+                count_word_of_the_player = self.write_letter_of_the_player(letter, word_of_the_game)
+                print("Your word: " + self.word_of_the_player)
                 print("You have {} more attempts." .format(attempts))
             else:
                 self.error = self.error + 1
@@ -40,30 +42,32 @@ class HangmanGame:
                 if attempts > -1:
                     hangman_drawings.HangmanDrawing.draw_hangman_drawing(self.error)
                     print("You have {} more attempts.".format(attempts))
-                    print("Your word: " + word_of_the_player)
+                    print("Your word: " + self.word_of_the_player)
             if self.error > 6:
                 hangman_drawings.HangmanDrawing.draw_hangman_drawing(self.error)
                 self.display_you_lose()
                 print('Word of the game: ' + word_of_the_game)
                 break
 
-        if len(word_of_the_player) == len(word_of_the_game) and self.error <= 6:
+        if count_word_of_the_player == len(word_of_the_game) and self.error <= 6:
             self.display_you_win()
 
     def write_letter_of_the_player(self, letter, word_of_the_game):
-        position_of_the_letter = 0
-        word_of_the_player = ''
+        count_word_of_the_player = 0
+        word_index = 0
+        self.letters_of_the_user.append(letter)
+        self.word_of_the_player = ''
 
-        while position_of_the_letter < len(word_of_the_game):
-            if letter == word_of_the_game[position_of_the_letter]:
-                self.letters_of_the_user.insert(position_of_the_letter, letter)
+        while word_index < len(word_of_the_game):
+            if word_of_the_game[word_index] in self.letters_of_the_user:
+                self.word_of_the_player = self.word_of_the_player + word_of_the_game[word_index]
+                count_word_of_the_player += 1
+            else:
+                self.word_of_the_player = self.word_of_the_player + '__ '
 
-            position_of_the_letter = position_of_the_letter + 1
+            word_index += 1
 
-        for caractere in self.letters_of_the_user:
-            word_of_the_player = word_of_the_player + caractere
-
-        return word_of_the_player
+        return count_word_of_the_player
 
     def display_you_win(self):
         message = """
@@ -101,11 +105,3 @@ class HangmanGame:
                               
                   """
         print(message)
-
-
-if __name__ == '__main__':
-    game = HangmanGame(0)
-    word_of_the_game = game.get_word()
-    print("Word: " + word_of_the_game)
-
-    game.guess_letter(word_of_the_game)
